@@ -3565,7 +3565,9 @@ namespace ts {
             }
         }
 
-        context.requestEmitHelper(decorateHelper);
+        const options = context.getCompilerOptions();
+        if (!options.excludeDecoratorHelpers)
+            context.requestEmitHelper(decorateHelper);
         return setTextRange(
             createCall(
                 getHelperName("__decorate"),
