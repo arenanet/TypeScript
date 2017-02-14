@@ -7488,6 +7488,53 @@ namespace ts {
     }
 
     /*@internal*/
+    function checkForInclude(scanner: Scanner, text: string): FileReference {
+        // Process the following pattern for a file reference:
+        //   include('foo.ts');
+
+        function tokenOf(scanner: Scanner, text: string): string {
+            const pos = scanner.getTokenPos();
+            const end = scanner.getTextPos();
+            return text.substr(pos, end - pos);
+        }
+
+        function scanFor(scanner: Scanner, kind: ts.SyntaxKind): boolean {
+            while (true) {
+                const next = scanner.lookAhead(() => { return scanner.scan(); });
+                if (isTrivia(next)) {
+                    scanner.scan();
+                    continue;
+                }
+                if (next == kind) {
+                    scanner.scan();
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        const start = scanner.getTokenPos();
+        if (tokenOf(scanner, text) !== 'include')
+            return undefined;
+        if (!scanFor(scanner, SyntaxKind.OpenParenToken))
+            return undefined;
+        if (!scanFor(scanner, SyntaxKind.StringLiteral))
+            return undefined;
+        const path = tokenOf(scanner, text);
+        if (path.length < 2)
+            return undefined;
+        if (!scanFor(scanner, SyntaxKind.CloseParenToken))
+            return undefined;
+        scanFor(scanner, SyntaxKind.SemicolonToken);    // semicolon may or may not be there
+
+        return {
+            pos: start,
+            end: scanner.getTextPos(),
+            fileName: path.substr(1, path.length - 2)   // strip quotes
+        }
+    }
+
+    /*@internal*/
     export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
         const triviaScanner = createScanner(context.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
         const pragmas: PragmaPsuedoMapEntry[] = [];
@@ -7497,6 +7544,18 @@ namespace ts {
         // reference comment.
         while (true) {
             const kind = triviaScanner.scan();
+
+            if (kind == SyntaxKind.Identifier) {
+                const ref = checkForInclude(triviaScanner, sourceText);
+                if (!ref)
+                    break;
+                const name = "reference" as keyof PragmaPsuedoMap;
+                const path = { pos: ref.pos, end: ref.end, value: ref.fileName };
+                const range = { pos: ref.pos, end: ref.end, kind: SyntaxKind.SingleLineCommentTrivia };
+                pragmas.push({ name, args: { arguments: { path }, range } } as PragmaPsuedoMapEntry);
+                continue;
+            }
+
             if (!isTrivia(kind)) {
                 break;
             }
