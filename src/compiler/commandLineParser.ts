@@ -204,6 +204,11 @@ namespace ts {
             description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
         },
         {
+            name: "preserveFunctionNames",
+            type: "boolean",
+            description: Diagnostics.Preserve_function_names_in_class_method_definitions
+        },
+        {
             name: "pretty",
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental,
             type: "boolean"
