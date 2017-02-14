@@ -6032,6 +6032,52 @@ namespace ts {
             return finishNode(node);
         }
 
+        function checkForInclude(scanner: Scanner, text: string): FileReference {
+            // Process the following pattern for a file reference:
+            //   include('foo.ts');
+
+            function tokenOf(scanner: Scanner, text: string): string {
+                const pos = scanner.getTokenPos();
+                const end = scanner.getTextPos();
+                return text.substr(pos, end - pos);
+            }
+
+            function scanFor(scanner: Scanner, kind: ts.SyntaxKind): boolean {
+                while (true) {
+                    const next = scanner.lookAhead(() => { return scanner.scan(); });
+                    if (isTrivia(next)) {
+                        scanner.scan();
+                        continue;
+                    }
+                    if (next == kind) {
+                        scanner.scan();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+
+            const start = scanner.getTokenPos();
+            if (tokenOf(scanner, text) !== 'include')
+                return undefined;
+            if (!scanFor(scanner, SyntaxKind.OpenParenToken))
+                return undefined;
+            if (!scanFor(scanner, SyntaxKind.StringLiteral))
+                return undefined;
+            const path = tokenOf(scanner, text);
+            if (path.length < 2)
+                return undefined;
+            if (!scanFor(scanner, SyntaxKind.CloseParenToken))
+                return undefined;
+            scanFor(scanner, SyntaxKind.SemicolonToken);    // semicolon may or may not be there
+
+            return {
+                pos: start,
+                end: scanner.getTextPos(),
+                fileName: path.substr(1, path.length - 2)   // strip quotes
+            }
+        }
+
         function processReferenceComments(sourceFile: SourceFile): void {
             const triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
             const referencedFiles: FileReference[] = [];
@@ -6048,6 +6094,13 @@ namespace ts {
                 if (kind !== SyntaxKind.SingleLineCommentTrivia) {
                     if (isTrivia(kind)) {
                         continue;
+                    }
+                    else if (kind == SyntaxKind.Identifier) {
+                        const ref = checkForInclude(triviaScanner, sourceText);
+                        if (ref)
+                            referencedFiles.push(ref);
+                        else
+                            break;
                     }
                     else {
                         break;

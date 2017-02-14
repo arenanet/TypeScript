@@ -325,6 +325,11 @@ namespace ts {
             description: Diagnostics.Report_errors_on_unused_parameters,
         },
         {
+            name: "preserveFunctionNames",
+            type: "boolean",
+            description: Diagnostics.Preserve_function_names_in_class_method_definitions
+        },
+        {
             name: "noImplicitReturns",
             type: "boolean",
             showInSimplifiedHelpView: true,
@@ -453,6 +458,23 @@ namespace ts {
         },
 
         // Experimental
+        {
+            name: "excludeExtendsHelpers",
+            type: "boolean",
+            description: Diagnostics.Exclude_helpers_for_extended_classes
+        },
+        {
+            name: "excludeDecoratorHelpers",
+            type: "boolean",
+            description: Diagnostics.Exclude_helpers_for_decorators
+        },
+        {
+            name: "moduleBase",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Specify_the_base_path_for_absolute_module_file_references,
+            paramType: Diagnostics.LOCATION,
+        },
         {
             name: "experimentalDecorators",
             type: "boolean",

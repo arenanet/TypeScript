@@ -1589,8 +1589,12 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
+            const options = context.getCompilerOptions();
+            let name: ts.Identifier;
+            if (options.preserveFunctionNames && member.name.kind == ts.SyntaxKind.Identifier)
+                name = <ts.Identifier>member.name;
             const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
-            const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
+            const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, name, container);
             setEmitFlags(memberFunction, EmitFlags.NoComments);
             setSourceMapRange(memberFunction, sourceMapRange);
 
@@ -4053,7 +4057,9 @@ namespace ts {
     }
 
     function createExtendsHelper(context: TransformationContext, name: Identifier) {
-        context.requestEmitHelper(extendsHelper);
+        const options = context.getCompilerOptions();
+        if (!options.excludeExtendsHelpers)
+            context.requestEmitHelper(extendsHelper);
         return createCall(
             getHelperName("__extends"),
             /*typeArguments*/ undefined,

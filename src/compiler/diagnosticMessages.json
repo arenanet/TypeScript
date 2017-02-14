@@ -3463,6 +3463,22 @@
         "category": "Message",
         "code": 6190
     },
+    "Preserve function names in class method definitions": {
+        "category": "Message",
+        "code": 6191
+    },
+    "Exclude helpers for extended classes.": {
+        "category": "Message",
+        "code": 6192
+    },
+    "Specify the base path for absolute module file references": {
+        "category": "Message",
+        "code": 6193
+    },
+    "Exclude helpers for decorators.": {
+        "category": "Message",
+        "code": 6194
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
