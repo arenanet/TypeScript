@@ -298,6 +298,11 @@ namespace ts {
             description: Diagnostics.Report_errors_on_unused_parameters,
         },
         {
+            name: "preserveFunctionNames",
+            type: "boolean",
+            description: Diagnostics.Preserve_function_names_in_class_method_definitions
+        },
+        {
             name: "noImplicitReturns",
             type: "boolean",
             showInSimplifiedHelpView: true,
