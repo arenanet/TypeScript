@@ -3009,6 +3009,10 @@
         "category": "Message",
         "code": 6148
     },
+    "Preserve function names in class method definitions": {
+        "category": "Message",
+        "code": 6149
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
