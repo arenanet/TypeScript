@@ -294,6 +294,11 @@ namespace ts {
             description: Diagnostics.Watch_input_files,
         },
         {
+            name: "excludeExtendsHelpers",
+            type: "boolean",
+            description: Diagnostics.Exclude_helpers_for_extended_classes
+        },
+        {
             name: "experimentalDecorators",
             type: "boolean",
             description: Diagnostics.Enables_experimental_support_for_ES7_decorators
