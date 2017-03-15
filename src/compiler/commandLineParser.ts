@@ -420,6 +420,11 @@ namespace ts {
 
         // Experimental
         {
+            name: "excludeExtendsHelpers",
+            type: "boolean",
+            description: Diagnostics.Exclude_helpers_for_extended_classes
+        },
+        {
             name: "experimentalDecorators",
             type: "boolean",
             category: Diagnostics.Experimental_Options,
