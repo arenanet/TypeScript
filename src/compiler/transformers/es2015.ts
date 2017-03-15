@@ -3791,7 +3791,9 @@ namespace ts {
     }
 
     function createExtendsHelper(context: TransformationContext, name: Identifier) {
-        context.requestEmitHelper(extendsHelper);
+        const options = context.getCompilerOptions();
+        if (!options.excludeExtendsHelpers)
+            context.requestEmitHelper(extendsHelper);
         return createCall(
             getHelperName("__extends"),
             /*typeArguments*/ undefined,

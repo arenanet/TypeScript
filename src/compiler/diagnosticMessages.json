@@ -3049,9 +3049,13 @@
         "category": "Message",
         "code": 6150
     },
-    "Preserve function names in class method definitions": {
+    "Preserve function names in class method definitions.": {
         "category": "Message",
         "code": 6151
+    },
+    "Exclude helpers for extended classes.": {
+        "category": "Message",
+        "code": 6152
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
