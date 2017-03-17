@@ -3213,6 +3213,10 @@
         "category": "Message",
         "code": 6184
     },
+    "Specify the base path for absolute module file references": {
+        "category": "Message",
+        "code": 6185
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
