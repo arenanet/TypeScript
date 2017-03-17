@@ -21,7 +21,12 @@ namespace ts {
         return undefined;
     }
 
-    export function resolveTripleslashReference(moduleName: string, containingFile: string): string {
+    export function resolveTripleslashReference(moduleName: string, containingFile: string, moduleBase?: string): string {
+        // If the module name starts with '/' and there's a module base path,
+        // prepend the module base to the module name.
+        if (moduleBase && getRootLength(moduleName) == 1) {
+            return normalizePath(combinePaths(moduleBase, moduleName.substr(1)));
+        }
         const basePath = getDirectoryPath(containingFile);
         const referencedFileName = isRootedDiskPath(moduleName) ? moduleName : combinePaths(basePath, moduleName);
         return normalizePath(referencedFileName);
@@ -1609,7 +1614,7 @@ namespace ts {
 
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
-                const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
+                const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName, options.moduleBase);
                 processSourceFile(referencedFileName, isDefaultLib, file, ref.pos, ref.end);
             });
         }
