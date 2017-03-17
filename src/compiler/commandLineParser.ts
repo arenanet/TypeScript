@@ -432,6 +432,13 @@ namespace ts {
             description: Diagnostics.Exclude_helpers_for_extended_classes
         },
         {
+            name: "moduleBase",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Specify_the_base_path_for_absolute_module_file_references,
+            paramType: Diagnostics.LOCATION,
+        },
+        {
             name: "experimentalDecorators",
             type: "boolean",
             category: Diagnostics.Experimental_Options,
