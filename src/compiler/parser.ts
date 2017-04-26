@@ -5824,15 +5824,19 @@ namespace ts {
             function scanFor(scanner: Scanner, kind: ts.SyntaxKind): boolean {
                 while (true) {
                     const next = scanner.lookAhead(() => { return scanner.scan(); });
-                    if (isTrivia(next)) {
-                        scanner.scan();
-                        continue;
-                    }
-                    if (next == kind) {
-                        scanner.scan();
-                        return true;
-                    }
+                    if (isTrivia(next)) { scanner.scan(); continue; }
+                    if (next == kind) { scanner.scan(); return true; }
                     return false;
+                }
+            }
+
+            function scanUntil(scanner: Scanner, kind: ts.SyntaxKind): boolean {
+                while (true) {
+                    const token = scanner.scan();
+                    if (token === kind)
+                        return true;
+                    if (token === SyntaxKind.EndOfFileToken)
+                        return false;
                 }
             }
 
@@ -5846,7 +5850,7 @@ namespace ts {
             const path = tokenOf(scanner, text);
             if (path.length < 2)
                 return undefined;
-            if (!scanFor(scanner, SyntaxKind.CloseParenToken))
+            if (!scanUntil(scanner, SyntaxKind.CloseParenToken))
                 return undefined;
             scanFor(scanner, SyntaxKind.SemicolonToken);    // semicolon may or may not be there
 
