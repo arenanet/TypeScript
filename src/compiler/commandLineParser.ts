@@ -432,6 +432,11 @@ namespace ts {
             description: Diagnostics.Exclude_helpers_for_extended_classes
         },
         {
+            name: "excludeDecoratorHelpers",
+            type: "boolean",
+            description: Diagnostics.Exclude_helpers_for_decorators
+        },
+        {
             name: "moduleBase",
             type: "string",
             isFilePath: true,

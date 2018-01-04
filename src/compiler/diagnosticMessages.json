@@ -3314,6 +3314,10 @@
         "category": "Message",
         "code": 6188
     },
+    "Exclude helpers for decorators.": {
+        "category": "Message",
+        "code": 6189
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

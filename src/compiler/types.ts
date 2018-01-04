@@ -3570,6 +3570,7 @@ namespace ts {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         excludeExtendsHelpers?: boolean;
+        excludeDecoratorHelpers?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
